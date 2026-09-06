@@ -1,0 +1,9 @@
+.venv
+.vercel/python
+__pycache__
+*.pyc
+.Python
+*.zip
+.DS_Store
+node_modules
+.env

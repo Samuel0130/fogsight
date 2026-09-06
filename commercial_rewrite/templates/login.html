@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>登录 · Animation Studio</title>
+    <link rel="stylesheet" href="/static/app.css?v=3" />
+  </head>
+  <body>
+    <div class="shell login-shell">
+      <div class="login-card">
+        <div class="brand">
+          <div class="mark" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="name">Animation Studio</div>
+            <div class="tagline">请输入访问密码</div>
+          </div>
+        </div>
+        <form id="login-form" class="form">
+          <label class="label" for="password">访问密码</label>
+          <input
+            id="password"
+            name="password"
+            class="input"
+            type="password"
+            autocomplete="current-password"
+            placeholder="输入密码后进入"
+            required
+          />
+          <button class="btn primary" type="submit">进入</button>
+          <div id="login-status" class="status" role="status" aria-live="polite"></div>
+        </form>
+      </div>
+    </div>
+    <script>
+      const form = document.getElementById("login-form");
+      const statusEl = document.getElementById("login-status");
+      const passwordInput = document.getElementById("password");
+
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        statusEl.textContent = "验证中…";
+        statusEl.classList.remove("error", "ok");
+        try {
+          const res = await fetch("/api/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "same-origin",
+            body: JSON.stringify({ password: passwordInput.value }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+          statusEl.textContent = "验证成功，正在进入…";
+          statusEl.classList.add("ok");
+          window.location.href = "/";
+        } catch (err) {
+          statusEl.textContent = err.message || String(err);
+          statusEl.classList.add("error");
+        }
+      });
+    </script>
+  </body>
+</html>

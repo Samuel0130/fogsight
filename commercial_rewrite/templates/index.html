@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>动画序列帧生成器</title>
+    <link rel="stylesheet" href="/static/app.css?v=3" />
+  </head>
+  <body>
+    <div class="shell">
+      <header class="header">
+        <div class="brand">
+          <div class="mark" aria-hidden="true"></div>
+          <div class="brand-text">
+            <div class="name">Animation Studio</div>
+            <div class="tagline">一句话生成动画，并导出序列帧</div>
+          </div>
+        </div>
+        <div class="meta">
+          <span class="pill">在线版</span>
+          <span class="pill">LLM 生成 HTML 动画</span>
+          <span class="pill">导出 PNG 序列</span>
+          <button id="btn-logout" class="pill logout-pill" type="button">退出登录</button>
+        </div>
+      </header>
+
+      <main class="main">
+        <section class="panel">
+          <form id="form" class="form">
+            <label class="label" for="prompt">输入主题</label>
+            <div class="row">
+              <input
+                id="prompt"
+                name="prompt"
+                class="input"
+                autocomplete="off"
+                placeholder="例如：冒泡排序 / 黑洞如何形成 / 热寂"
+                required
+              />
+              <button id="btn-generate" class="btn primary" type="submit">生成</button>
+            </div>
+
+            <div class="row actions">
+              <button id="btn-open" class="btn" type="button" disabled>新窗口打开</button>
+              <button id="btn-save" class="btn" type="button" disabled>保存 HTML</button>
+              <button id="btn-frames" class="btn" type="button" disabled>导出序列帧 ZIP</button>
+            </div>
+
+            <div class="export-settings">
+              <div class="export-item">
+                <label class="export-label" for="fps">导出 FPS</label>
+                <input id="fps" class="export-input" type="number" min="1" max="60" step="1" value="12" />
+              </div>
+              <div class="export-item">
+                <label class="export-label" for="maxFrames">最大帧数</label>
+                <input id="maxFrames" class="export-input" type="number" min="60" max="6000" step="60" value="1500" />
+              </div>
+              <div class="export-tip" id="exportTip"></div>
+            </div>
+
+            <div id="status" class="status" role="status" aria-live="polite"></div>
+          </form>
+
+          <details class="code" open>
+            <summary>生成的 HTML（可编辑后再预览/导出）</summary>
+            <textarea id="code" spellcheck="false" placeholder="等待生成..."></textarea>
+          </details>
+        </section>
+
+        <section class="preview">
+          <div class="preview-top">
+            <div class="preview-title">预览</div>
+            <div class="hint">提示：导出序列帧会调用动画页面的 `renderFrame(t)`</div>
+          </div>
+          <div class="frame">
+            <iframe id="player" sandbox="allow-scripts allow-same-origin"></iframe>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <span>商用需确保你拥有全部代码/素材/模型使用权与合规授权。</span>
+      </footer>
+    </div>
+
+    <!-- 仅用于导出 ZIP/保存文件：采用常见、宽松许可库（仍建议你在商用前自行核对许可证） -->
+    <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/file-saver@2.0.5/dist/FileSaver.min.js"></script>
+    <script src="/static/app.js?v=3"></script>
+  </body>
+</html>
+
